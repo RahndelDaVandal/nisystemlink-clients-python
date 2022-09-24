@@ -41,7 +41,7 @@ class TestITagReader:
         reader = self.MockTagReader()
 
         for data_type, (serialized_value, value) in self.test_values.items():
-            path = "MyPath.{}".format(data_type.name)
+            path = f"MyPath.{data_type.name}"
             tag_reader = reader.get_tag_reader(path, data_type)
             reader.mock_read.configure_mock(
                 return_value=SerializedTagWithAggregates(
@@ -58,7 +58,7 @@ class TestITagReader:
         reader = self.MockTagReader()
 
         for data_type, (serialized_value, value) in self.test_values.items():
-            path = "MyPath.{}".format(data_type.name)
+            path = f"MyPath.{data_type.name}"
             tag_reader = reader.get_tag_reader(path, data_type)
             reader.mock_read.configure_mock(
                 return_value=SerializedTagWithAggregates(
@@ -96,9 +96,7 @@ class TestITagReader:
             for data_type, (_, value) in self.test_values.items():
                 pytype_name = str(type(value).__name__)
                 code[data_type.name] = code_template % (pytype_name, data_type.name)
-                with tempfile.TemporaryFile(
-                    mode="w+", delete=False, prefix=data_type.name + "_", suffix=".py"
-                ) as f:
+                with tempfile.TemporaryFile(mode="w+", delete=False, prefix=f"{data_type.name}_", suffix=".py") as f:
                     files.append(f.name)
                     f.write(code[data_type.name])
             stdout, stderr, exit_code = mypy.api.run(files)

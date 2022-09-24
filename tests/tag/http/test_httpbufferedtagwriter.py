@@ -34,7 +34,7 @@ class TestHttpBufferedTagWriter(HttpClientTestBase):
         assert data[0].get("path") == path
         updates = data[0].get("updates")
         assert isinstance(updates, list)
-        utctime = datetime.utcfromtimestamp(timestamp.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(timestamp.timestamp()).isoformat()}Z"
         assert updates == [
             {"value": {"type": "INT", "value": str(value)}, "timestamp": utctime}
         ]
@@ -59,7 +59,7 @@ class TestHttpBufferedTagWriter(HttpClientTestBase):
         assert data[0].get("path") == path
         updates = data[0].get("updates")
         assert isinstance(updates, list)
-        utctime = datetime.utcfromtimestamp(timestamp.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(timestamp.timestamp()).isoformat()}Z"
         assert updates == [
             {"value": {"type": "INT", "value": str(value)}, "timestamp": utctime}
         ]
@@ -88,9 +88,9 @@ class TestHttpBufferedTagWriter(HttpClientTestBase):
         assert len(data) == 2
         assert data[0]["path"] == path1
         assert data[1]["path"] == path2
-        utctime1 = datetime.utcfromtimestamp(timestamp1.timestamp()).isoformat() + "Z"
-        utctime2 = datetime.utcfromtimestamp(timestamp2.timestamp()).isoformat() + "Z"
-        utctime3 = datetime.utcfromtimestamp(timestamp3.timestamp()).isoformat() + "Z"
+        utctime1 = f"{datetime.utcfromtimestamp(timestamp1.timestamp()).isoformat()}Z"
+        utctime2 = f"{datetime.utcfromtimestamp(timestamp2.timestamp()).isoformat()}Z"
+        utctime3 = f"{datetime.utcfromtimestamp(timestamp3.timestamp()).isoformat()}Z"
         assert data[0]["updates"] == [
             {"value": {"type": "INT", "value": str(value1)}, "timestamp": utctime1},
             {"value": {"type": "INT", "value": str(value3)}, "timestamp": utctime3},
@@ -119,7 +119,7 @@ class TestHttpBufferedTagWriter(HttpClientTestBase):
         assert ("POST", "/nitag/v2/update-current-values") == call[0]
         data = call[1]["data"]
         assert data[0]["path"] == path
-        utctime = datetime.utcfromtimestamp(timestamp.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(timestamp.timestamp()).isoformat()}Z"
         assert data[0]["updates"] == [
             {"value": {"type": "INT", "value": str(value)}, "timestamp": utctime}
         ]
@@ -144,8 +144,8 @@ class TestHttpBufferedTagWriter(HttpClientTestBase):
         data2 = call2[1]["data"]
         assert data1[0]["path"] == path
         assert data2[0]["path"] == path
-        utctime1 = datetime.utcfromtimestamp(timestamp1.timestamp()).isoformat() + "Z"
-        utctime2 = datetime.utcfromtimestamp(timestamp2.timestamp()).isoformat() + "Z"
+        utctime1 = f"{datetime.utcfromtimestamp(timestamp1.timestamp()).isoformat()}Z"
+        utctime2 = f"{datetime.utcfromtimestamp(timestamp2.timestamp()).isoformat()}Z"
         assert data1[0]["updates"] == [
             {"value": {"type": "INT", "value": str(value1)}, "timestamp": utctime1}
         ]

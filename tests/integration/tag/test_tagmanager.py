@@ -302,7 +302,7 @@ class TagManagerTests:
         self.tag_manager.refresh([opened_tag])
 
         properties["prop4"] = "value4"
-        assert opened_tag.collect_aggregates is False
+        assert not opened_tag.collect_aggregates
         assert tbase.DataType.DOUBLE == opened_tag.data_type
         assert sorted(keywords) == sorted(opened_tag.keywords)
         assert tag.path == opened_tag.path
@@ -368,8 +368,9 @@ class TagManagerTests:
 
         # Wildcard query
         self.internal_test_query_result(
-            self.tag_manager.query([path_prefix + "*"]), paths, len(paths)
+            self.tag_manager.query([f"{path_prefix}*"]), paths, len(paths)
         )
+
 
         # Keyword query
         self.internal_test_query_result(
@@ -408,7 +409,7 @@ class TagManagerTests:
         assert all(len(page) == page_size for page in pages[:-1])
         paths = [tag.path for page in pages for tag in page]
 
-        expected_list[0:skip] = []
+        expected_list[:skip] = []
         assert sorted(expected_list) == sorted(paths)
         assert expected_pages == len(pages)
 

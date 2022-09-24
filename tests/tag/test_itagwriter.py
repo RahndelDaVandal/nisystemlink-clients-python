@@ -38,7 +38,7 @@ class TestITagWriter:
         writer = self.MockTagWriter()
 
         for data_type, (serialized_value, value) in self.test_values.items():
-            path = "MyPath.{}".format(data_type.name)
+            path = f"MyPath.{data_type.name}"
             tag_writer = writer.get_tag_writer(path, data_type)
             tag_writer.write(value)
             writer.mock_write.assert_called_with(
@@ -50,7 +50,7 @@ class TestITagWriter:
         writer = self.MockTagWriter()
 
         for data_type, (serialized_value, value) in self.test_values.items():
-            path = "MyPath.{}".format(data_type.name)
+            path = f"MyPath.{data_type.name}"
             tag_writer = writer.get_tag_writer(path, data_type)
             await tag_writer.write_async(value)
             writer.mock_write.assert_called_with(
@@ -79,9 +79,7 @@ class TestITagWriter:
             code = {}
             for data_type, (_, value) in self.test_values.items():
                 code[data_type.name] = code_template % (repr(value), data_type.name)
-                with tempfile.TemporaryFile(
-                    mode="w+", delete=False, prefix=data_type.name + "_", suffix=".py"
-                ) as f:
+                with tempfile.TemporaryFile(mode="w+", delete=False, prefix=f"{data_type.name}_", suffix=".py") as f:
                     files.append(f.name)
                     f.write(code[data_type.name])
             stdout, stderr, exit_code = mypy.api.run(files)

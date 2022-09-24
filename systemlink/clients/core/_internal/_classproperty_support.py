@@ -14,15 +14,17 @@ class ClasspropertySupport(abc.ABCMeta):
         def __init__(self, func: Callable[[Any], Any]):
             self.func = func
 
-    def __new__(
-        meta, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]
-    ) -> "ClasspropertySupport":
-        class ClasspropertySupport_(meta):  # type: ignore
+    def __new__(cls, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> "ClasspropertySupport":
+
+
+
+        class ClasspropertySupport_(cls):  # type: ignore
             pass
+
 
         for k, v in dct.items():
             # Promote all instance properties to be class properties
-            if isinstance(v, meta._ClassProperty):
+            if isinstance(v, cls._ClassProperty):
                 setattr(ClasspropertySupport_, k, property(v.func))
 
         return typing.cast(

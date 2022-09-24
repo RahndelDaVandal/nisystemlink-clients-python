@@ -29,8 +29,6 @@ class AsyncTagQueryResultCollection(abc.ABC):
                     "skip is >= totalCount, but the tag list isn't empty"
                 )
             self._current_page = first_page
-        else:
-            pass  # leave it as None, even if passed in as []
         self._skip = skip
         self._current_skip = skip
 

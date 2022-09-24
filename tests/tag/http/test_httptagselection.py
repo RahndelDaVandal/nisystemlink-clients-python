@@ -21,7 +21,7 @@ class TestHttpTagSelection(HttpClientTestBase):
             elif uri.startswith("/nitag/v2/selections"):
                 if uri in ("/nitag/v2/selections", "/nitag/v2/selections/{id}"):
                     data = dict(data)
-                    data.update({"id": token})
+                    data["id"] = token
                     ret = data
                 elif uri.endswith("/tags"):
                     if isinstance(query_result, Exception):
@@ -444,7 +444,7 @@ class TestHttpTagSelection(HttpClientTestBase):
         def mock_request(method, uri, params=None, data=None):
             if uri == "/nitag/v2/selections":
                 data = dict(data)
-                data.update({"id": tokens.pop(0)})
+                data["id"] = tokens.pop(0)
                 return data, MockResponse(method, uri)
             elif uri.endswith("/tags"):
                 if method == "DELETE":
@@ -589,7 +589,7 @@ class TestHttpTagSelection(HttpClientTestBase):
         def mock_request(method, uri, params=None, data=None):
             if uri == "/nitag/v2/selections":
                 data = dict(data)
-                data.update({"id": tokens.pop(0)})
+                data["id"] = tokens.pop(0)
                 return data, MockResponse(method, uri)
             elif uri.endswith("/tags"):
                 if method == "DELETE":
@@ -726,7 +726,7 @@ class TestHttpTagSelection(HttpClientTestBase):
         def mock_request(method, uri, params=None, data=None):
             if uri == "/nitag/v2/selections":
                 data = dict(data)
-                data.update({"id": tokens.pop(0)})
+                data["id"] = tokens.pop(0)
                 return data, MockResponse(method, uri)
             elif uri.endswith("/tags"):
                 result = tag_results.pop(0)
@@ -864,7 +864,7 @@ class TestHttpTagSelection(HttpClientTestBase):
         def mock_request(method, uri, params=None, data=None):
             if uri == "/nitag/v2/selections":
                 data = dict(data)
-                data.update({"id": tokens.pop(0)})
+                data["id"] = tokens.pop(0)
                 return data, MockResponse(method, uri)
             elif uri.endswith("/tags"):
                 result = tag_results.pop(0)

@@ -44,18 +44,18 @@ class ManualResetTimer(events.Events, metaclass=ClasspropertySupport):
     __null_timer_impl = None  # type: Optional[ManualResetTimer]
 
     @ClasspropertySupport.classproperty
-    def null_timer(cls) -> "ManualResetTimer":
+    def null_timer(self) -> "ManualResetTimer":
         """A timer that never fires."""
-        if cls.__null_timer_impl is None:
+        if self.__null_timer_impl is None:
             # Bypass the ManualResetTimer constructor, to make a timerless timer
-            obj = cls.__new__(ManualResetTimer)
+            obj = self.__new__(ManualResetTimer)
             super(ManualResetTimer, obj).__init__()  # but call the base constructor
 
             obj._thread = None
             obj._running = []  # used as mutable boolean; empty is False
 
-            cls.__null_timer_impl = obj
-        return cls.__null_timer_impl
+            self.__null_timer_impl = obj
+        return self.__null_timer_impl
 
     def __init__(self, interval: datetime.timedelta) -> None:
         """Initialize a timer that fires at the given interval a single time once

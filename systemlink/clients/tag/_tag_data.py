@@ -70,10 +70,11 @@ class TagData:
         if self.data_type == tbase.DataType.UNKNOWN:
             raise ValueError("Invalid tag data type")
 
-        data = {}  # type: Dict[str, Any]
-        data["path"] = self._path
-        data["type"] = self._data_type.api_name
-        data["collectAggregates"] = self.collect_aggregates
+        data = {
+            "path": self._path,
+            "type": self._data_type.api_name,
+            "collectAggregates": self.collect_aggregates,
+        }
 
         if self._keywords:
             data["keywords"] = self._keywords
@@ -291,9 +292,7 @@ class TagData:
 
         if self.data_type != required_type:
             raise ValueError(
-                "Tag must be a {} type but is a {} tag".format(
-                    required_type.name, self.data_type.name
-                )
+                f"Tag must be a {required_type.name} type but is a {self.data_type.name} tag"
             )
 
     def validate_path(self) -> str:

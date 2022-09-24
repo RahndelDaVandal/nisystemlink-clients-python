@@ -25,11 +25,13 @@ class HttpClient:
     def __init__(self, configuration: core.HttpConfiguration) -> None:
         self._server = configuration.server_uri.rstrip("/")
 
-        self._kwargs = {}  # type: Dict[str, Any]
-        self._kwargs["headers"] = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
+        self._kwargs = {
+            "headers": {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
         }
+
         if configuration.api_keys is not None:
             self._kwargs["headers"].update(configuration.api_keys)
         elif configuration.username is not None and configuration.password is not None:
@@ -275,12 +277,8 @@ def _handle_response(response: HttpResponse, method: str, uri: str) -> Any:
                 ) from None
 
     if not 200 <= response.status_code < 300:
-        msg = "Server responded with <{} {}> when calling {} ({})".format(
-            response.status_code,
-            getattr(response, "reason_phrase", None) or getattr(response, "reason"),
-            method,
-            uri,
-        )
+        msg = f'Server responded with <{response.status_code} {getattr(response, "reason_phrase", None) or getattr(response, "reason")}> when calling {method} ({uri})'
+
         if non_json_error:
             msg += ":\n\n" + non_json_error
 

@@ -38,14 +38,11 @@ class ApiException(Exception):
         return self._message
 
     @property
-    def error(self) -> Optional[core.ApiError]:  # noqa: D401
+    def error(self) -> Optional[core.ApiError]:    # noqa: D401
         """The error information returned by the SystemLink API, or None if the API did
         not return one or the error occurred trying to call the API.
         """
-        if self._error is None:
-            return None
-        else:
-            return self._error.copy()
+        return None if self._error is None else self._error.copy()
 
     @property
     def http_status_code(self) -> Optional[int]:  # noqa: D401

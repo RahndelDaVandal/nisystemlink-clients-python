@@ -30,7 +30,7 @@ class TimestampUtilities:
         Returns:
             The string representation of the timestamp.
         """
-        return datetime.datetime.utcfromtimestamp(value.timestamp()).isoformat() + "Z"
+        return f"{datetime.datetime.utcfromtimestamp(value.timestamp()).isoformat()}Z"
 
     @classmethod
     def str_to_datetime(cls, timestamp: str) -> datetime.datetime:
@@ -50,9 +50,7 @@ class TimestampUtilities:
         # decimal, and doesn't support "Z" as the timezone
         # Valid format is: YYYY-MM-DDThh:mm:ss.ssssss+NN:NN
         if not timestamp.endswith("Z"):
-            raise ValueError(
-                "Given timestamp doesn't end with 'Z': '{}'".format(timestamp)
-            )
+            raise ValueError(f"Given timestamp doesn't end with 'Z': '{timestamp}'")
         timestamp = timestamp[:-1].ljust(26, "0")[:26] + "+0000"
         # Note to users: this will be in UTC time; to get a local datetime, you
         # can use value.astimezone()

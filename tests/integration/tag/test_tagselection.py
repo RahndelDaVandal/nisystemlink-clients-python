@@ -24,7 +24,7 @@ class TagSelectionTests:
             assert sorted(paths) == sorted(selection.metadata.keys())
 
     def test__create_selection_from_paths__paths_and_tags_are_correct(self):
-        path_query = self._path_prefix + "*"
+        path_query = f"{self._path_prefix}*"
         with self.tag_manager.open_selection([path_query]) as selection:
             assert 1 == len(selection.paths)
             assert path_query == selection.paths[0]

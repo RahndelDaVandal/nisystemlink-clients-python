@@ -79,25 +79,20 @@ class TagSubscriptionTests:
             assert reader is not None
             if tag.data_type == tbase.DataType.DOUBLE:
                 assert double_value == reader.read().value
-                break
             elif tag.data_type == tbase.DataType.INT32:
                 assert int_value == reader.read().value
-                break
             elif tag.data_type == tbase.DataType.STRING:
                 assert string_value == reader.read().value
-                break
             elif tag.data_type == tbase.DataType.BOOLEAN:
                 assert bool_value == reader.read().value
-                break
             elif tag.data_type == tbase.DataType.UINT64:
                 assert uint64_value == reader.read().value
-                break
             elif tag.data_type == tbase.DataType.DATE_TIME:
                 assert date_value == reader.read().value
-                break
             else:
-                assert False, "Unknown data type {}".format(tag.data_type)
-                break
+                assert False, f"Unknown data type {tag.data_type}"
+
+            break
 
     @pytest.mark.slow
     def test__subscription_outlives_heartbeat_interval__events_still_received(self):
@@ -125,7 +120,7 @@ class TagSubscriptionTests:
                 writer.write(int_tag.path, int_tag.data_type, x)
 
                 for _ in range(2):
-                    if 1 == len(tag_changes):
+                    if len(tag_changes) == 1:
                         break
                     time.sleep(1 + polling_interval.total_seconds())
                 else:

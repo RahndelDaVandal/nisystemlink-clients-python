@@ -147,9 +147,6 @@ class TagDataUpdate:
         return self._path
 
     @property
-    def properties(self) -> Optional[Dict[str, str]]:  # noqa: D401
+    def properties(self) -> Optional[Dict[str, str]]:    # noqa: D401
         """The properties send with the update, or None to not send any properties."""
-        if self._properties:
-            return dict(self._properties)
-        else:
-            return None
+        return dict(self._properties) if self._properties else None
