@@ -200,8 +200,7 @@ class BufferedTagWriter(tbase.ITagWriter):
         self.send_buffered_writes()
         self._closed = True
 
-        suppress = self._flush_timer.__exit__(exc_type, exc_val, exc_tb)
-        return suppress
+        return self._flush_timer.__exit__(exc_type, exc_val, exc_tb)
 
     async def __aexit__(
         self,
@@ -337,16 +336,15 @@ class BufferedTagWriter(tbase.ITagWriter):
 
         if timestamp is None:
             timestamp = self._stamper.timestamp
+        elif timestamp.tzinfo is None and sys.version_info < (3, 6):
+            # python 3.5's .astimezone fails if given a naive datetime, so use a
+            # roundabout method; python 3.6+ allow naive datetimes and assume a
+            # local timezone, so allow the same here
+            timestamp = datetime.datetime.fromtimestamp(
+                timestamp.timestamp(), datetime.timezone.utc
+            )
         else:
-            if timestamp.tzinfo is None and sys.version_info < (3, 6):
-                # python 3.5's .astimezone fails if given a naive datetime, so use a
-                # roundabout method; python 3.6+ allow naive datetimes and assume a
-                # local timezone, so allow the same here
-                timestamp = datetime.datetime.fromtimestamp(
-                    timestamp.timestamp(), datetime.timezone.utc
-                )
-            else:
-                timestamp = timestamp.astimezone(datetime.timezone.utc)
+            timestamp = timestamp.astimezone(datetime.timezone.utc)
         return self._create_item(
             tbase.TagPathUtilities.validate(path), data_type, value, timestamp
         )

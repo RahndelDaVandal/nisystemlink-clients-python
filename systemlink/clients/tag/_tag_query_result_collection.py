@@ -32,8 +32,6 @@ class TagQueryResultCollection(abc.ABC):
                     "skip is >= totalCount, but the tag list isn't empty"
                 )
             self._first_page = first_page
-        else:
-            pass  # leave it as None, even if passed in as []
         self._use_cached_page = True
         self._total_count = total_count
         self._skip = skip

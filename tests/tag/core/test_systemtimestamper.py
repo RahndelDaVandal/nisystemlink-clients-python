@@ -62,9 +62,7 @@ def _assert_time_within_tolerance(expected, actual):
     difference = abs((actual - expected).total_seconds())
     assert (
         difference < tolerance_seconds
-    ), 'Expected time to be "{}" +/- {} seconds but was "{}" for a {} second difference'.format(
-        expected, tolerance_seconds, actual, difference
-    )
+    ), f'Expected time to be "{expected}" +/- {tolerance_seconds} seconds but was "{actual}" for a {difference} second difference'
 
 
 def _gmt_now():

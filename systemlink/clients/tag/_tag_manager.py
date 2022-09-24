@@ -164,9 +164,7 @@ class TagManager(tbase.ITagReader):
             )
         except core.ApiException as ex:
             error_name = None if ex.error is None else ex.error.name
-            if create and (error_name or "").startswith("Tag.NoSuchTag"):
-                pass  # continue on and create the tag
-            else:
+            if not create or not (error_name or "").startswith("Tag.NoSuchTag"):
                 raise
 
         if tag is not None:
@@ -227,9 +225,7 @@ class TagManager(tbase.ITagReader):
             )
         except core.ApiException as ex:
             error_name = None if ex.error is None else ex.error.name
-            if create and (error_name or "").startswith("Tag.NoSuchTag"):
-                pass  # continue on and create the tag
-            else:
+            if not create or not (error_name or "").startswith("Tag.NoSuchTag"):
                 raise
 
         if tag is not None:
@@ -454,15 +450,13 @@ class TagManager(tbase.ITagReader):
             raise ValueError("take cannot be negative")
 
         path_str = None
-        keyword_str = None
         prop_str = None
 
         if paths is not None:
             path_str = ",".join(tbase.TagPathUtilities.validate_query(p) for p in paths)
-        if keywords:
-            keyword_str = ",".join(keywords)
+        keyword_str = ",".join(keywords) if keywords else None
         if properties:
-            prop_str = ",".join("{}={}".format(k, v) for k, v in properties.items())
+            prop_str = ",".join(f"{k}={v}" for k, v in properties.items())
 
         return path_str, keyword_str, prop_str
 
@@ -690,19 +684,18 @@ class TagManager(tbase.ITagReader):
         if buffer_size is None and max_buffer_time is None:
             raise ValueError("must provide either buffer_size or max_buffer_time")
 
-        if buffer_size is not None:
-            if buffer_size < 1:
-                raise ValueError("buffer_size cannot be 0 or negative")
-        else:
+        if buffer_size is None:
             buffer_size = 0
 
-        if max_buffer_time is not None:
-            if max_buffer_time.total_seconds() < 0.001:
-                raise ValueError("max_buffer_time must be at least 1 millisecond")
-            timer = ManualResetTimer(max_buffer_time)
-        else:
+        elif buffer_size < 1:
+            raise ValueError("buffer_size cannot be 0 or negative")
+        if max_buffer_time is None:
             timer = ManualResetTimer.null_timer
 
+        elif max_buffer_time.total_seconds() < 0.001:
+            raise ValueError("max_buffer_time must be at least 1 millisecond")
+        else:
+            timer = ManualResetTimer(max_buffer_time)
         return HttpBufferedTagWriter(
             self._http_client, SystemTimeStamper(), buffer_size, timer
         )
@@ -817,10 +810,7 @@ class TagManager(tbase.ITagReader):
         if current is None:
             return None
 
-        if "type" in response:
-            val = response
-        else:
-            val = current["value"]
+        val = response if "type" in response else current["value"]
         if val is None:
             return None
 
@@ -848,5 +838,5 @@ class TagManager(tbase.ITagReader):
     def invalid_response(cls, response: HttpResponse) -> core.ApiException:
         request = response.request
         return core.ApiException(
-            "Invalid response from {} {}".format(request.method, request.url)
+            f"Invalid response from {request.method} {request.url}"
         )

@@ -259,10 +259,6 @@ class TagSubscription(events.Events, abc.ABC):
         try:
             self._send_heartbeat()
         except core.ApiException:
-            try:
+            with contextlib.suppress(core.ApiException):
                 self._create_subscription_on_server(self._paths)
-            except core.ApiException:
-                # Ignore, we'll try again later
-                pass
-
         self._heartbeat_timer.start()

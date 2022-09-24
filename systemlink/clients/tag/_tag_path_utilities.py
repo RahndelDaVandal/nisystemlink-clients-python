@@ -31,7 +31,7 @@ class TagPathUtilities:
             ValueError: if the path is invalid.
             ValueError: if ``path`` is None.
         """
-        if path is None or path.lstrip() == "":
+        if path is None or not path.lstrip():
             raise ValueError("Tag path cannot be None or empty")
 
         if "*" in path:
@@ -55,7 +55,7 @@ class TagPathUtilities:
             ValueError: if the path is invalid.
             ValueError: if ``path`` is None.
         """
-        if path is None or path.lstrip() == "":
+        if path is None or not path.lstrip():
             raise ValueError("Tag path cannot be None or empty")
 
         if "," in path:

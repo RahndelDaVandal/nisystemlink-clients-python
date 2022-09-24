@@ -53,10 +53,7 @@ class SerializedTagWithAggregatesReader(tbase.ITagReader):
             The value serialized as a string, or None if the tag exists but doesn't have
             a value.
         """
-        if self._value.path == path:
-            return self._value
-        else:
-            return None
+        return self._value if self._value.path == path else None
 
     async def _read_async(
         self, path: str, include_timestamp: bool, include_aggregates: bool
@@ -78,7 +75,4 @@ class SerializedTagWithAggregatesReader(tbase.ITagReader):
             The value serialized as a string, or None if the tag exists but doesn't have
             a value.
         """
-        if self._value.path == path:
-            return self._value
-        else:
-            return None
+        return self._value if self._value.path == path else None

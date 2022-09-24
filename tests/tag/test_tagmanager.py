@@ -602,8 +602,11 @@ class TestTagManager(HttpClientTestBase):
         self._uut.refresh([tag1, tag2])
 
         self._client.all_requests.assert_called_once_with(
-            "GET", "/nitag/v2/tags", params={"path": path1 + "," + path2, "take": "2"}
+            "GET",
+            "/nitag/v2/tags",
+            params={"path": f"{path1},{path2}", "take": "2"},
         )
+
         assert tbase.DataType.BOOLEAN == tag1.data_type
         assert tag1.collect_aggregates is True
         assert keywords == sorted(tag1.keywords)
@@ -640,7 +643,7 @@ class TestTagManager(HttpClientTestBase):
         )
         assert tbase.DataType.BOOLEAN == tag1.data_type
         assert tbase.DataType.UNKNOWN == tag2.data_type
-        assert tag2.collect_aggregates is True
+        assert tag2.collect_aggregates
         assert keywords == tag2.keywords
         assert properties == tag2.properties
         assert tag2.retention_count is None
@@ -700,8 +703,11 @@ class TestTagManager(HttpClientTestBase):
         await self._uut.refresh_async([tag1, tag2])
 
         self._client.all_requests.assert_called_once_with(
-            "GET", "/nitag/v2/tags", params={"path": path1 + "," + path2, "take": "2"}
+            "GET",
+            "/nitag/v2/tags",
+            params={"path": f"{path1},{path2}", "take": "2"},
         )
+
         assert tbase.DataType.BOOLEAN == tag1.data_type
         assert tag1.collect_aggregates is True
         assert keywords == sorted(tag1.keywords)
@@ -739,7 +745,7 @@ class TestTagManager(HttpClientTestBase):
         )
         assert tbase.DataType.BOOLEAN == tag1.data_type
         assert tbase.DataType.UNKNOWN == tag2.data_type
-        assert tag2.collect_aggregates is True
+        assert tag2.collect_aggregates
         assert keywords == tag2.keywords
         assert properties == tag2.properties
         assert tag2.retention_count is None
@@ -2338,7 +2344,7 @@ class TestTagManager(HttpClientTestBase):
         writer.write(path, tbase.DataType.INT32, value1, timestamp=timestamp)
         writer.write(path, tbase.DataType.INT32, value2, timestamp=timestamp)
 
-        utctime = datetime.utcfromtimestamp(timestamp.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(timestamp.timestamp()).isoformat()}Z"
         self._client.all_requests.assert_called_once_with(
             "POST",
             "/nitag/v2/update-current-values",
@@ -2371,12 +2377,12 @@ class TestTagManager(HttpClientTestBase):
 
         writer.write(path, tbase.DataType.INT32, value, timestamp=timestamp)
         self._client.all_requests.assert_not_called()
-        for i in range(100):
+        for _ in range(100):
             if self._client.all_requests.call_count > 0:
                 break
             time.sleep(0.01)
 
-        utctime = datetime.utcfromtimestamp(timestamp.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(timestamp.timestamp()).isoformat()}Z"
         self._client.all_requests.assert_called_once_with(
             "POST",
             "/nitag/v2/update-current-values",
@@ -2413,7 +2419,7 @@ class TestTagManager(HttpClientTestBase):
         writer1.write(path, tbase.DataType.INT32, value1, timestamp=timestamp)
         writer1.write(path, tbase.DataType.INT32, value2, timestamp=timestamp)
 
-        utctime = datetime.utcfromtimestamp(timestamp.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(timestamp.timestamp()).isoformat()}Z"
         self._client.all_requests.assert_called_once_with(
             "POST",
             "/nitag/v2/update-current-values",
@@ -2437,7 +2443,7 @@ class TestTagManager(HttpClientTestBase):
 
         writer2.write(path, tbase.DataType.INT32, value3, timestamp=timestamp)
         assert 1 == self._client.all_requests.call_count  # same as before
-        for i in range(100):
+        for _ in range(100):
             if self._client.all_requests.call_count > 1:
                 break
             time.sleep(0.01)
@@ -2474,7 +2480,7 @@ class TestTagManager(HttpClientTestBase):
         path = "test"
         value = "success"
         now = datetime.now(timezone.utc)
-        utctime = datetime.utcfromtimestamp(now.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(now.timestamp()).isoformat()}Z"
         self._client.all_requests.configure_mock(
             side_effect=self._get_mock_request(
                 [
@@ -2542,7 +2548,7 @@ class TestTagManager(HttpClientTestBase):
         path = "test"
         value = "success"
         now = datetime.now(timezone.utc)
-        utctime = datetime.utcfromtimestamp(now.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(now.timestamp()).isoformat()}Z"
         self._client.all_requests.configure_mock(
             side_effect=self._get_mock_request(
                 [
@@ -2657,7 +2663,7 @@ class TestTagManager(HttpClientTestBase):
         path = "test"
         value = "success"
         now = datetime.now(timezone.utc)
-        utctime = datetime.utcfromtimestamp(now.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(now.timestamp()).isoformat()}Z"
         self._client.all_requests.configure_mock(
             side_effect=self._get_mock_request(
                 [
@@ -2731,7 +2737,7 @@ class TestTagManager(HttpClientTestBase):
         path = "test"
         value = "success"
         now = datetime.now(timezone.utc)
-        utctime = datetime.utcfromtimestamp(now.timestamp()).isoformat() + "Z"
+        utctime = f"{datetime.utcfromtimestamp(now.timestamp()).isoformat()}Z"
         self._client.all_requests.configure_mock(
             side_effect=self._get_mock_request(
                 [

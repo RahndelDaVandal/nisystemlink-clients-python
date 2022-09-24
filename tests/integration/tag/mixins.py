@@ -54,7 +54,7 @@ class TagBaseMixin:
             test_name = request.node.originalname or request.node.name
             path = ".".join(("test", test_class, test_name, str(uuid.uuid4())))
             if suffix:
-                path += "." + suffix
+                path += f".{suffix}"
             request.cls.created_tags.append(path)
             return path
 

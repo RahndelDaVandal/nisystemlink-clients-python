@@ -183,31 +183,25 @@ class ITagWriter(_ITagWriterOverloads):
 
         if not isinstance(value, _VALID_TYPES[data_type]):
             raise ValueError(
-                "value has wrong python data type ({}) for SystemLink data type {}".format(
-                    type(value).__name__, data_type.name
-                )
+                f"value has wrong python data type ({type(value).__name__}) for SystemLink data type {data_type.name}"
             )
+
 
         # python's bool is a subclass of int, so the above check won't catch some cases
         if isinstance(value, bool) and data_type != tbase.DataType.BOOLEAN:
             raise ValueError(
-                "value has wrong python data type ({}) for SystemLink data type {}".format(
-                    type(value).__name__, data_type.name
-                )
+                f"value has wrong python data type ({type(value).__name__}) for SystemLink data type {data_type.name}"
             )
+
 
         if data_type == tbase.DataType.INT32:
             assert isinstance(value, int)
             if not -(2 ** 31) <= value < 2 ** 31:
-                raise ValueError(
-                    "value {} is not the valid range of an INT32".format(value)
-                )
+                raise ValueError(f"value {value} is not the valid range of an INT32")
         elif data_type == tbase.DataType.UINT64:
             assert isinstance(value, int)
             if not 0 <= value < 2 ** 64:
-                raise ValueError(
-                    "value {} is not the valid range of a UINT64".format(value)
-                )
+                raise ValueError(f"value {value} is not the valid range of a UINT64")
 
     @abc.abstractmethod
     def _write(

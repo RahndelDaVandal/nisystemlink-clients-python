@@ -108,23 +108,21 @@ class ApiError:
     def __str__(self) -> str:
         txt = ""
         if self._name:
-            txt += "Name: {}\n".format(self._name)
+            txt += f"Name: {self._name}\n"
         if self._code:
-            txt += "Code: {}\n".format(self._code)
+            txt += f"Code: {self._code}\n"
         if self._message:
-            txt += "Message: {}\n".format(self._message)
+            txt += f"Message: {self._message}\n"
         if self._args:
             args = "\n  ".join(self._args)
-            txt += "Args:\n  {}\n".format(args)
+            txt += f"Args:\n  {args}\n"
         if self._resource_type:
-            txt += "Resource Type: {}\n".format(self._resource_type)
+            txt += f"Resource Type: {self._resource_type}\n"
         if self._resource_id:
-            txt += "Resource Id: {}\n".format(self._resource_id)
+            txt += f"Resource Id: {self._resource_id}\n"
         if self._inner_errors:
             inner_errors = "\n  ".join(str(e) for e in self._inner_errors)
-            txt += "Inner Errors:\n  {}\n".format(
-                str(inner_errors).replace("\n", "\n  ")
-            )
+            txt += "Inner Errors:\n  {}\n".format(inner_errors.replace("\n", "\n  "))
         return txt[:-1]
 
     def __repr__(self) -> str:

@@ -22,13 +22,10 @@ def _skip_member(app, what, name, obj, skip, options):
     if obj is object.__init__:
         return True
 
-    # Don't inherit a docstring for __init__ methods that have no docstring of their
-    # own.
-    if name == "__init__" and not obj.__doc__:
-        return True
-
-    # Don't include __init__ in the docs if the class is abstract.
     if name == "__init__":
+        if not obj.__doc__:
+            return True
+
         mod = inspect.getmodule(obj)
         class_name = obj.__qualname__.rsplit(".", 1)[0]
         if mod is not None:

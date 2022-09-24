@@ -82,9 +82,7 @@ class HttpConfigurationManager:
         if master_config is not None:
             return master_config
         localhost_config = cls._configs.get(cls.HTTP_LOCALHOST_CONFIGURATION_ID)
-        if localhost_config is not None:
-            return localhost_config
-        return None
+        return localhost_config if localhost_config is not None else None
 
     @classmethod
     def _read_configurations(cls) -> Dict[str, core.HttpConfiguration]:
@@ -108,12 +106,14 @@ class HttpConfigurationManager:
             json_files = path.glob("*.json")
         except PermissionError as e:
             raise core.ApiException(
-                "Not authorized to access HTTP configurations directory: " + str(e)
+                f"Not authorized to access HTTP configurations directory: {str(e)}"
             )
+
         except OSError as e:
             raise core.ApiException(
-                "Error while accessing HTTP configurations directory: " + str(e)
+                f"Error while accessing HTTP configurations directory: {str(e)}"
             )
+
 
         for json_file in json_files:
             try:
@@ -138,10 +138,7 @@ class HttpConfigurationManager:
                 configurations[config_file.id] = core.HttpConfiguration(
                     config_file.uri, config_file.api_key, cert_path=cert_path
                 )
-            except PermissionError:
-                pass
             except OSError:
-                # The individual file is inaccessible or badly formatted, so just skip it
                 pass
             except json.JSONDecodeError:
                 pass
@@ -169,7 +166,7 @@ class HttpConfigurationManager:
             json.decoder.JSONDecodeError: if the file does not contain valid JSON.
         """
         if not path.exists():
-            raise OSError("HTTP configuration file was not found: " + str(path))
+            raise OSError(f"HTTP configuration file was not found: {str(path)}")
         with path.open() as f:
             config_dict = json.load(f)
         config = HttpConfigurationFile.from_json_dict(config_dict)

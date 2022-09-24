@@ -16,4 +16,4 @@ class AnyOrderList:
         return str(self._list)
 
     def __repr__(self):
-        return "AnyOrderList({})".format(repr(self._list))
+        return f"AnyOrderList({repr(self._list)})"

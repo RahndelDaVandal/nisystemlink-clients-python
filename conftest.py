@@ -32,8 +32,7 @@ def cloud_config(pytestconfig):
 
     This requires the --cloud-api-key command line flag, or else skips the test.
     """
-    api_key = pytestconfig.getoption("cloud_api_key", default=None)
-    if api_key:
+    if api_key := pytestconfig.getoption("cloud_api_key", default=None):
         return core.CloudHttpConfiguration(api_key)
     else:
         pytest.skip("--cloud-api-key setting not found")
@@ -50,8 +49,9 @@ def server_config(pytestconfig):
     """
     settings = {}
     for setting in ("url", "user", "password"):
-        val = pytestconfig.getoption("web_server_" + setting, default=None)
-        if val:
+        if val := pytestconfig.getoption(
+            f"web_server_{setting}", default=None
+        ):
             settings[setting] = val
     if settings:
         return core.HttpConfiguration(
